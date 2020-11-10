@@ -1,2 +1,2 @@
 # EDFViewer-Desktop
-Desktop application created with Qt/C++ for browsing EDF Files.
+Desktop application created with Qt/C++ used for browsing EDF Files.
