@@ -265,6 +265,7 @@ if (f){
     //qDebug()<<"edfhcalled file closed";
     }
 //.... buffers?
+return 1;
 }
 
 int EDFfilehandler::getsignaldata(int signum,char *name, char *transducertype, char *phdimension, float *phmin, float *phmax, int *digmin, int *digmax, char *prefiltering, int *samplesperrecordp){
