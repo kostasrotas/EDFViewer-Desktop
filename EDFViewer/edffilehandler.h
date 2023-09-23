@@ -71,7 +71,7 @@ public:
                 // must be followed by <numofsignals> addsignaldata
     int closefile();
     int getsignaldata(int signum,char *name,char *transducertype=NULL,char *phdimension=NULL,float *phmin=NULL,float *phmax=NULL,int *digmin=NULL,int *digmax=NULL,char *prefiltering=NULL,int *samplesperrecord=NULL);
-    int addsignaldata(char *name,char *transducertype,char *phdimension,float phmin,float phmax,int digmin,int digmax,char *prefiltering,int samplesperrecord);
+    int addsignaldata(const char *name,const char *transducertype,const char *phdimension,float phmin,float phmax,int digmin,int digmax,const char *prefiltering,int samplesperrecord);
     int addannotsignaldata(int samplesperrecord);
 
     signed short int getdata(int signalnum,long pos);
@@ -93,7 +93,7 @@ public:
 
 
 private:
-    void writefilestr(char * str, int size);
+    void writefilestr(const char * str, int size);
     void readfilestr(char *str,int size);
 };
 

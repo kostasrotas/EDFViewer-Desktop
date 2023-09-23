@@ -147,7 +147,7 @@ int EDFfilehandler::openfile(char *pathname){
 }
 
 
-void EDFfilehandler::writefilestr(char * str, int size){
+void EDFfilehandler::writefilestr(const char * str, int size){
      char str1[10000];
      strcpy(str1,str);
      if (strlen(str1)>size){
@@ -265,7 +265,7 @@ if (f){
     //qDebug()<<"edfhcalled file closed";
     }
 //.... buffers?
-return 1;
+return 0;
 }
 
 int EDFfilehandler::getsignaldata(int signum,char *name, char *transducertype, char *phdimension, float *phmin, float *phmax, int *digmin, int *digmax, char *prefiltering, int *samplesperrecordp){
@@ -311,7 +311,7 @@ int EDFfilehandler::getsignaldata(int signum,char *name, char *transducertype, c
     return 1;
 }
 
-int EDFfilehandler::addsignaldata(char *name, char *transducertype, char *phdimension, float phmin, float phmax, int digmin, int digmax, char *prefiltering, int ssamplesperrecord){
+int EDFfilehandler::addsignaldata(const char *name,const char *transducertype,const char *phdimension, float phmin, float phmax, int digmin, int digmax,const char *prefiltering, int ssamplesperrecord){
 char str[256];
 fseek(f,256+0+16*addedsignals,SEEK_SET);
 if (name)

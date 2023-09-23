@@ -112,7 +112,8 @@ void datawindow(){
 }
 
 void aboutwindow(){
-    char str[256];
+    QString firstLineStr = QString("<b>EDF Viewer ")+QString(VERSION)+QString("</b><br>");
+    QString lastLineStr="<br><br>(c)2016-2023 Rotas Kostas, email:kostasrotas@yahoo.com";
     QWidget *wp=new QWidget();
     QPushButton *button;
     QVBoxLayout *vb = new QVBoxLayout;
@@ -120,9 +121,19 @@ void aboutwindow(){
     wp->setWindowModality(Qt::ApplicationModal);
     wp->setWindowTitle("About EDF-Viewer");
     wp->setLayout(vb);
-    sprintf(str,"          EDF Viewer %s",VERSION);
-    vb->addWidget(new QLabel(str));
-    vb->addWidget(new QLabel("\n\n  Program used to display EDF files.\n  Released under MIT License (MIT)\n  Created with QT Creator\n  See Licences.txt for Licences\n\n   (c)2016 Rotas Kostas, email:kostasrotas@yahoo.com  "));
+    QString browserText=firstLineStr;
+    browserText.append(" Program used to display EDF files.<br>  Released under MIT License (MIT)<br>  Created with QT Creator<br>  See Licences.txt for Licences<br><br>");
+    browserText.append("Project page:<br><a href=\"https://users.sch.gr/kostasrotas/edfviewer\">https://users.sch.gr/kostasrotas/edfviewer</a><br>");
+    browserText.append("Github Page:<br><a href=\"https://github.com/kostasrotas/EDFViewer-Desktop#edfviewer-desktop\">https://github.com/kostasrotas/EDFViewer-Desktop</a>" );
+    browserText.append(lastLineStr);
+    QTextBrowser* browser = new QTextBrowser();
+     browser->setHtml(browserText);
+     browser->setOpenExternalLinks( true );
+     QFontMetrics m (browser -> font()) ;
+     int rowHeight = m.lineSpacing() ;
+     browser -> setFixedHeight  (14*rowHeight) ;
+     browser -> setFixedWidth(2+m.horizontalAdvance(lastLineStr));
+     vb->addWidget(browser);
     wp->show();
     button = new QPushButton("O.K.");
     vb->addWidget(button);
