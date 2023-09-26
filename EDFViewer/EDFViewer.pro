@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = EDFViewer
 TEMPLATE = app
 
+RC_ICONS = edfviewer_ic.ico
 
 SOURCES += main.cpp\
     edffilehandler.cpp \
@@ -23,3 +24,5 @@ HEADERS  += edfviewer.h \
     edffilehandler.h
 
 LIBS += -L$$PWD/
+
+RESOURCES +=
