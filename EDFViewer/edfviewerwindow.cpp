@@ -100,6 +100,7 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     vb->addLayout(hb);
     resize(450,400);
     setLayout(vb);
+    setWindowTitle("EDFViewer");
 }
 
 

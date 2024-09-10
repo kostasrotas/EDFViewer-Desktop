@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     edffilehandler.cpp \
         edfviewerwindow.cpp \
     paintwidget.cpp \
-    datawindows.cpp
+    datawindows.cpp \
+    signalswindow.cpp
 
 HEADERS  += edfviewer.h \
     paintwidget.h \

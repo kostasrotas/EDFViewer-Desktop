@@ -31,7 +31,7 @@ SOFTWARE.
 #include "paintwidget.h"
 #include "edffilehandler.h"
 
-#define VERSION "v1.4"
+#define VERSION "v1.5"
 
 class EDFViewerWindow : public QWidget
 {
