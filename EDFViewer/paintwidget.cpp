@@ -107,7 +107,7 @@ void PaintWidget::paintEvent(QPaintEvent *event){
     painter.fillRect(rect(),Qt::black);
     painter.setRenderHint(QPainter::Antialiasing);
     if (fileisopen){
-        int numstoprint=0,i;
+        int numstoprint=0;
         for (i=0;i<edfh.numofgraphsingals();i++)
             numstoprint+=showsignal[i];
         if (numstoprint==0){

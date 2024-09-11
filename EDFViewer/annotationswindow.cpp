@@ -26,14 +26,15 @@ SOFTWARE.
 #include<qdebug.h>
 
 QWidget *annotationswp;
+QTableWidget *tablewp;
+char skipChange;
 
 void annotationswindow(){
     QPushButton *button;
     QVBoxLayout *vb = new QVBoxLayout;
     QHBoxLayout *hb2,*hb1,*hb3;
-    QListWidget *listwp;
-    static char annotStr[1024];
-    static char timeStr[1024];
+    char annotStr[1024];
+    char timeStr[1024];
     char str[256];
     long i,j;
 
@@ -49,96 +50,44 @@ void annotationswindow(){
         vb->addWidget(new QLabel("This file does not contain annotations"));
     }
     else{
-        listwp=new QListWidget;
+        tablewp=new QTableWidget();
+        tablewp->setColumnCount(2);
+        tablewp->verticalHeader()->setVisible(false);
+        tablewp->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tablewp->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tablewp->setSelectionMode(QAbstractItemView::SingleSelection);
+        tablewp->setRowCount(0);
+        j=0;
+        tablewp->setHorizontalHeaderLabels({"Time","Annotation"});
         for (i=0;i<edfh.numofdatarecords;i++){
             edfh.getannotation(i,1,annotStr,timeStr);
             if (annotStr[0]!=0){
-                sprintf(str,"[%s] %s",timeStr,annotStr);
-                listwp->addItem(str);
-                //qDebug() << "annotation ["<<timeStr<<"] "<<annotStr<<" "<<atime;
+                tablewp->setRowCount(j+1);
+                tablewp->setItem(j,0, new QTableWidgetItem(timeStr));
+                tablewp->setItem(j++,1, new QTableWidgetItem(annotStr));
+                }
             }
+        vb->addWidget(tablewp);
+        skipChange=1;
+        QObject :: connect (tablewp,&QTableWidget::currentItemChanged,[&]{
+            QString str;
+            int row=tablewp->currentRow();
+            if (skipChange){
+                skipChange=0;
+                return;
+            }
+            str = tablewp->item(row,0)->text();
+            if (str.startsWith("+")){
+                qDebug()<<"Move to "<<str;
+                starttime=str.toDouble();
+                edfViewerWindow->repaint();
+                }
+            });
         }
-        vb->addWidget(listwp);
-        QObject :: connect (listwp,&QListWidget::currentRowChanged,[&]{
-            char str[256];
-            qDebug()<<"Move to "<<listwp->currentRow();
-            //edfh.getannotation(listwp->currentRow(),1,annotStr,str);
-            //qDebug()<<"time "<<str;
-        });
-    }
-
-
-
-
     hb3=new QHBoxLayout;
     button = new QPushButton("O.K.");
     QObject::connect(button,SIGNAL(clicked()),annotationswp,SLOT(close()));
     hb3->addWidget(button);
     vb->addLayout(hb3);
     annotationswp->show();
-
-/*    char str[256];
-    char str2[256];
-    char useTips;
-    float phmin,phmax;
-    int spr,digmin,digmax;
-    char name[256],dim[256];
-    int i,j;
-    int numOfColums=1;
-    if (fileisopen==0)
-        return;
-    signalwp=new QWidget();
-    QPushButton *button;
-    QVBoxLayout *vb = new QVBoxLayout;
-    QHBoxLayout *hb2,*hb1,*hb3;
-    QVBoxLayout *vbn[10];
-    signalwp->setAttribute(Qt::WA_DeleteOnClose);
-    signalwp->setWindowModality(Qt::ApplicationModal);
-    signalwp->setWindowTitle("EDF Signals");
-    signalwp->setLayout(vb);
-    if (edfh.numofgraphsingals()<=24){
-        useTips=0;
-        numOfColums=1+edfh.numofgraphsingals()/8;
-    }
-    else{
-        useTips=1;
-        numOfColums=1+edfh.numofgraphsingals()/16;
-    }
-    hb1=new QHBoxLayout;
-    vb->addLayout(hb1);
-    for (i=0;i<numOfColums;i++){
-        vbn[i]=new QVBoxLayout;
-        hb1->addLayout(vbn[i],1);
-    }
-    for (i=0;i<edfh.numofgraphsingals();i++){
-        hb2=new QHBoxLayout;
-        signalcb[i]=new QCheckBox();
-        signalcb[i]->setCheckState(showsignal[i]!=0?Qt::Checked:Qt::Unchecked);
-        hb2->addWidget(signalcb[i]);
-        edfh.getsignaldata(i,name,NULL,dim,&phmin,&phmax,&digmin,&digmax,NULL,&spr);
-        sprintf(str,"Signal %d [%s]",i+1,name);
-        sprintf(str2,"Signal %d [%s]\nPhysical %.2f...%.2f%s\nDigital :%d...%d\nSamples per record :%d",i+1,name,phmin,phmax,dim,digmin,digmax,spr);
-        QLabel* label=new QLabel();
-        if (useTips){
-            label->setText(str);
-            label->setToolTip(str2);
-        }
-        else{
-            label->setText(str2);
-        }
-        hb2->addWidget(label);
-        hb2->setStretch(hb2->count()-1,1);
-        vbn[i%numOfColums]->addLayout(hb2);
-    }
-    for (j=0;j<(numOfColums-i%numOfColums)%numOfColums;j++)
-        vbn[numOfColums-1-j]->addWidget(new QLabel(""));
-    hb3=new QHBoxLayout;
-    button = new QPushButton("Deselect/Select All");
-    QObject::connect(button,&QPushButton::clicked,seldeselall);
-    hb3->addWidget(button);
-    button = new QPushButton("O.K.");
-    QObject::connect(button,&QPushButton::clicked,closesignalswindow);
-    hb3->addWidget(button);
-    vb->addLayout(hb3);
-    signalwp->show();*/
 }

@@ -25,6 +25,7 @@ SOFTWARE.
 #include "edfviewer.h"
 
 PaintWidget* paintWidget;
+EDFViewerWindow * edfViewerWindow;
 char fileisopen=0;
 EDFfilehandler edfh(10000);
 double starttime,screentime=5,yZoom=1;
@@ -104,6 +105,7 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     resize(450,400);
     setLayout(vb);
     setWindowTitle("EDFViewer");
+    edfViewerWindow=this;
 }
 
 

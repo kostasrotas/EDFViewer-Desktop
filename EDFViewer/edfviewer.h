@@ -63,6 +63,7 @@ void aboutwindow();
 extern char fileisopen;
 extern EDFfilehandler edfh;
 extern PaintWidget* paintWidget;
+extern EDFViewerWindow * edfViewerWindow;
 
 extern double starttime,screentime,yZoom;
 extern char showsignal[];
