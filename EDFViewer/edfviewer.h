@@ -57,6 +57,7 @@ public slots:
 
 void datawindow();
 void signalswindow();
+void annotationswindow();
 void aboutwindow();
 
 extern char fileisopen;

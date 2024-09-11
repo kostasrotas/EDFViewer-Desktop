@@ -24,7 +24,9 @@ SOFTWARE.
 */
 
 #include "edffilehandler.h"
+
 //#include<qdebug.h>
+
 static const char ttstr[]="[Total time]";
 EDFfilehandler::EDFfilehandler(long readbuffersize){
     this->readbuffersize=readbuffersize;
@@ -89,6 +91,16 @@ int EDFfilehandler::openfile(char *pathname){
     numofdatarecords=atol(str);
     //qDebug()<<"numofdatarecords"<<numofdatarecords;
     readfilestr(str,8);// duration of a data record, in seconds
+    if (atof("0,1")==0.1){// use decimal comma instead of decimal point
+        for (i=0;i<strlen(str);i++)
+         if (str[i]=='.')
+             str[i]=',';
+    }
+    else if (atof("0.1")==0.1){// use decimal comma instead of decimal point
+        for (i=0;i<strlen(str);i++)
+         if (str[i]==',')
+             str[i]='.';
+    }
     recduration=atof(str);
     //qDebug()<<"recduration"<<recduration;
     readfilestr(str,4);//number of sigs (ns) in data record

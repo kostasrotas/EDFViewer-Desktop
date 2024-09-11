@@ -45,7 +45,7 @@ void datawindow(){
 
 void aboutwindow(){
     QString firstLineStr = QString("<b>EDF Viewer ")+QString(VERSION)+QString("</b><br>");
-    QString lastLineStr="<br><br>(c)2016-2023 Rotas Kostas, email:kostasrotas@yahoo.com";
+    QString lastLineStr="<br><br>(c)2016-2024 Kostas Rotas, email:kostasrotas@yahoo.com";
     QWidget *wp=new QWidget();
     QPushButton *button;
     QVBoxLayout *vb = new QVBoxLayout;

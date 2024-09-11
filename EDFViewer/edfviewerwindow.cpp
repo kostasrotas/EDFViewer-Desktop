@@ -59,6 +59,9 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     act=new QAction(tr("&Signals"), this);
     menu->addAction(act);
     QObject::connect(act,&QAction::triggered,signalswindow);
+    act=new QAction(tr("&Annotations"), this);
+    menu->addAction(act);
+    QObject::connect(act,&QAction::triggered,annotationswindow);
     hb->addWidget(menuBar);
     hb->setStretch(hb->count()-1,1);
     menuBar = new QMenuBar();

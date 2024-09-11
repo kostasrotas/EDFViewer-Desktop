@@ -14,6 +14,7 @@ TEMPLATE = app
 RC_ICONS = edfviewer_ic.ico
 
 SOURCES += main.cpp\
+    annotationswindow.cpp \
     edffilehandler.cpp \
         edfviewerwindow.cpp \
     paintwidget.cpp \
