@@ -50,6 +50,9 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     act=new QAction(tr("&Open"), this);
     menu->addAction(act);
     connect(act, SIGNAL(triggered()), this, SLOT(fileOpen()));
+    act=new QAction(tr("E&xport To csv"), this);
+    menu->addAction(act);
+    connect(act, SIGNAL(triggered()), this, SLOT(exportToCSV()));
     act=new QAction(tr("&Exit"), this);
     connect(act, SIGNAL(triggered()), this, SLOT(close()));
     menu->addAction(act);
@@ -166,6 +169,43 @@ void EDFViewerWindow::fileOpen(){
     QFileDialog dialog(this);
     strcpy(pathname ,dialog.getOpenFileName(this,"Open File",".", "EDF files (*.edf)").toUtf8());
     fileOpen(pathname);
+}
+
+
+void EDFViewerWindow::exportToCSV (QString filename){
+    long i,j;
+    QString lineStr;
+    QFile file(filename);
+    QTextStream out(&file);
+    file.open(QIODevice::WriteOnly);
+    for (i=0;i<edfh.numofdatarecords;i++){
+        lineStr="";
+        for (j=0;j<edfh.numofgraphsingals();j++){
+            int digdata = edfh.getdata(j,i);
+            float phdata,phmin,phmax;
+            int digmin,digmax;
+            edfh.getsignaldata(j,NULL,NULL,NULL,&phmin,&phmax,&digmin,&digmax,NULL,NULL);
+            phdata=phmin+(phmax-phmin)*((digdata-digmin+0.0)/(digmax-digmin+0.0));
+            lineStr.append(QString::number(phdata));
+            if (j!=edfh.numofgraphsingals()-1)
+                lineStr.append(";");
+        }
+        lineStr.append("\n");
+        out<<lineStr;
+    }
+    file.close();
+}
+
+void EDFViewerWindow::exportToCSV(){
+    if (!fileisopen)
+        return;
+    QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::AnyFile);
+    QString strFile(edfh.pathname);
+    strFile.chop(4);
+    strFile=strFile+".csv";
+    strFile = dialog.getSaveFileName(NULL, "Create New File",strFile,"CSV (*.csv)");
+    exportToCSV(strFile);
 }
 
 EDFViewerWindow::~EDFViewerWindow()

@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=EDFViewer
-AppVerName=EDFViewer v1.4
+AppVerName=EDFViewer v1.5
 AppPublisherURL=http://users.sch.gr/kostasrotas/edfviewer
 AppSupportURL=http://users.sch.gr/kostasrotas/edfviewer
 AppUpdatesURL=http://users.sch.gr/kostasrotas/edfviewer

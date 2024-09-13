@@ -44,8 +44,10 @@ public:
     ~EDFViewerWindow();
 
     char fileOpen(char*filename);
+    void exportToCSV (QString filename);
 
 public slots:
+    void exportToCSV();
     void fileOpen();
     void changehbar(int);
     void screentimechanged(const QString &);

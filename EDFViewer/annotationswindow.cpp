@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 #include "edfviewer.h"
-#include<qdebug.h>
+//#include<qdebug.h>
 
 QWidget *annotationswp;
 QTableWidget *tablewp;
@@ -78,7 +78,6 @@ void annotationswindow(){
             }
             str = tablewp->item(row,0)->text();
             if (str.startsWith("+")){
-                qDebug()<<"Move to "<<str;
                 starttime=str.toDouble();
                 edfViewerWindow->repaint();
                 }
