@@ -21,8 +21,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "datawindowhandler.h"
-#include "edfviewerwindow.h"
+#include "edfviewer.h"
 
 DataWindowHandler::DataWindowHandler(EDFfilehandler& edfh,EDFViewerWindow &edfViewerWindow)
     : QObject{nullptr},
@@ -52,7 +51,7 @@ void DataWindowHandler::open(){
 }
 
 void DataWindowHandler::openAbout(){
-    QString firstLineStr = QString("<b>EDF Viewer ");//+QString(VERSION)+QString("</b><br>");
+    QString firstLineStr = QString("<b>EDF Viewer ")+QString(VERSION)+QString("</b><br>");
     QString lastLineStr="<br><br>(c)2016-2024 Kostas Rotas, email:kostasrotas@yahoo.com";
     QWidget *wp=new QWidget();
     QPushButton *button;
