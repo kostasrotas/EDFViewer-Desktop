@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include "annotationswindowhandler.h"
-#include "EDFViewerWindow.h"
+#include "edfviewerwindow.h"
 
 AnnotationsWindowHandler::AnnotationsWindowHandler(EDFfilehandler &edfh,EDFViewerWindow &edfViewerWindow):
     QObject(nullptr),

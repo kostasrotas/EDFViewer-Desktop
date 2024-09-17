@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 #include "signalswindowhandler.h"
-#include "EDFViewerWindow.h"
+#include "edfviewerwindow.h"
 
 SignalsWindowHandler::SignalsWindowHandler(EDFfilehandler &edfh,EDFViewerWindow &edfViewerWindow):
     QObject(nullptr),

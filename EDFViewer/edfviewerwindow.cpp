@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "EDFViewerWindow.h"
+#include "edfviewerwindow.h"
 #include "edfviewer.h"
 #include "annotationswindowhandler.h"
 

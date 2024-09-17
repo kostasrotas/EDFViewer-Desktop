@@ -28,7 +28,7 @@ SOFTWARE.
 #include <QWidget>
 #include <QtWidgets>
 #include <QApplication>
-#include "EDFViewerWindow.h"
+#include "edfviewerwindow.h"
 
 #define VERSION "v1.5"
 

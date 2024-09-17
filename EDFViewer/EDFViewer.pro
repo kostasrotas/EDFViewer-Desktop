@@ -22,9 +22,9 @@ SOURCES += main.cpp\
     signalswindowhandler.cpp
 
 HEADERS  += edfviewer.h \
-    EDFViewerWindow.h \
     annotationswindowhandler.h \
     datawindowhandler.h \
+    edfviewerwindow.h \
     paintwidget.h \
     edffilehandler.h \
     signalswindowhandler.h

@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 #include "paintwidget.h"
-#include "EDFViewerWindow.h"
+#include "edfviewerwindow.h"
 
 char drawgrid=1;
 
