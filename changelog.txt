@@ -1,0 +1,5 @@
+v 1.5 13/9/2024   
+- added export to csv function
+- added annotation signal windows
+- improve signals presentation
+- minor bugs fixed
