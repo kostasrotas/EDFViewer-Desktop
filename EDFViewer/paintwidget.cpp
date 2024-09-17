@@ -63,7 +63,7 @@ void PaintWidget::drawsignal(QPainter *p,int s,int x1,int y1,int x2,int y2){
         }
     if (phmin<0 && phmax>0){//zeroline
         int zy=((y2-y1)*(-phmin))/(phmax-phmin);
-        int dy=((y2-y1)/10)*(i+1);
+        int dy=((y2-y1)/10);
         j=zy;
         ii=1;
         if (drawgrid)
