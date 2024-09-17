@@ -27,16 +27,19 @@ SOFTWARE.
 
 #include <QWidget>
 
+class EDFViewerWindow;
+class EDFfilehandler;
+
 class PaintWidget : public QWidget{
     Q_OBJECT
 public:
 
-    PaintWidget(QWidget *parent = 0);    
+    PaintWidget(EDFfilehandler&,EDFViewerWindow &);
     ~PaintWidget();
 
-signals:
-
-public slots:
+private:
+    EDFfilehandler &edfh;
+    EDFViewerWindow &edfViewerWindow;
 
 protected:
     void paintEvent(QPaintEvent *event);

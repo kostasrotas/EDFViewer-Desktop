@@ -22,16 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include "EDFViewerWindow.h"
 #include "edfviewer.h"
-
-PaintWidget* paintWidget;
-EDFViewerWindow * edfViewerWindow;
-char fileisopen=0;
-EDFfilehandler edfh(10000);
-double starttime,screentime=5,yZoom=1;
-char showsignal[200];
-
-
+#include "annotationswindowhandler.h"
 
 EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     : QWidget(parent){
@@ -41,6 +34,10 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     QAction *act;
     QMenuBar* menuBar;
     QPushButton* btn;
+
+    signalsWindowHandlerP=new SignalsWindowHandler(edfh,*this);
+    dataWindowHandlerP = new DataWindowHandler(edfh,*this);
+    annotationsWindowHandlerP = new AnnotationsWindowHandler(edfh,*this);
 
     vb=new QVBoxLayout();
     hb=new QHBoxLayout();
@@ -59,23 +56,31 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     menu= menuBar->addMenu(tr("&EDF"));
     act=new QAction(tr("&EDF Data"), this);
     menu->addAction(act);
-    QObject::connect(act,&QAction::triggered,datawindow);
+    QObject::connect(act,&QAction::triggered,[&]{
+        dataWindowHandlerP->open();
+        });
     act=new QAction(tr("&Signals"), this);
     menu->addAction(act);
-    QObject::connect(act,&QAction::triggered,signalswindow);
+    QObject::connect(act,&QAction::triggered,[&]{
+        signalsWindowHandlerP->open();
+        });
     act=new QAction(tr("&Annotations"), this);
     menu->addAction(act);
-    QObject::connect(act,&QAction::triggered,annotationswindow);
+    QObject::connect(act,&QAction::triggered,[&]{
+        annotationsWindowHandlerP->open();
+        });
     hb->addWidget(menuBar);
     hb->setStretch(hb->count()-1,1);
     menuBar = new QMenuBar();
     menu= menuBar->addMenu(tr("&Help"));
     act=new QAction(tr("&About"), this);
     menu->addAction(act);
-    QObject::connect(act,&QAction::triggered,aboutwindow);
+    QObject::connect(act,&QAction::triggered,[&]{
+        dataWindowHandlerP->openAbout();
+    });
     hb->addWidget(menuBar);
 
-    vb->addWidget(paintWidget=new PaintWidget());
+    vb->addWidget(paintWidget=new PaintWidget(edfh,*this));
     vb->setStretch(vb->count()-1,1);
     hScrollBar = new QScrollBar(Qt::Horizontal, this);
     connect(hScrollBar, SIGNAL(valueChanged(int)),this,SLOT(changehbar(int)));
@@ -107,10 +112,16 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     vb->addLayout(hb);
     resize(450,400);
     setLayout(vb);
-    setWindowTitle("EDFViewer");
-    edfViewerWindow=this;
+    setWindowTitle("EDFViewer");    
 }
 
+
+EDFViewerWindow::~EDFViewerWindow()
+{
+    delete annotationsWindowHandlerP;
+    delete dataWindowHandlerP;
+    delete signalsWindowHandlerP;
+}
 
 void EDFViewerWindow::increaseTime(){
     le1->setText(QString::number(atol(le1->text().toStdString().c_str())+1));
@@ -137,8 +148,21 @@ void EDFViewerWindow::screentimechanged(const QString & t){
 }
 
 void EDFViewerWindow::yzoomchanged(const QString & t){
-    if (atof(t.toStdString().c_str())>0)
-        yZoom=atof(t.toStdString().c_str());
+    char str[256];
+    int i;
+    strcpy(str,t.toStdString().c_str());
+    if (atof("0,1")==0.1){// use decimal comma instead of decimal point
+        for (i=0;i<strlen(str);i++)
+            if (str[i]=='.')
+                str[i]=',';
+    }
+    else if (atof("0.1")==0.1){// use decimal comma instead of decimal point
+        for (i=0;i<strlen(str);i++)
+            if (str[i]==',')
+                str[i]='.';
+    }
+    if (atof(str)>0)
+        yZoom=atof(str);
     repaint();
 }
 
@@ -159,7 +183,7 @@ char EDFViewerWindow::fileOpen(char*pathname){
     fileisopen=1;
     starttime=0;
     for (i=0;i<edfh.numofsignals;i++)
-        showsignal[i]=1;
+        showsignal[i]=true;
     repaint();
     return 1;
 }
@@ -208,7 +232,35 @@ void EDFViewerWindow::exportToCSV(){
     exportToCSV(strFile);
 }
 
-EDFViewerWindow::~EDFViewerWindow()
+bool EDFViewerWindow::fileIsOpen()
 {
+    return fileisopen;
+}
 
+bool EDFViewerWindow::getShowSignal(int i){
+    return showsignal[i];
+}
+
+void EDFViewerWindow::setShowSignal(int i, bool v)
+{
+    showsignal[i]=v;
+}
+
+
+double EDFViewerWindow::getScreenTime(){
+    return screentime;
+}
+
+double EDFViewerWindow::getStartTime(){
+    return starttime;
+}
+
+void EDFViewerWindow::setStartTime(double v)
+{
+    starttime=v;
+}
+
+double EDFViewerWindow::getYZoom()
+{
+    return yZoom;
 }

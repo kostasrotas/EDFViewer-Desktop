@@ -22,11 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "edfviewer.h"
+#include "paintwidget.h"
+#include "EDFViewerWindow.h"
 
 char drawgrid=1;
 
-PaintWidget::PaintWidget(QWidget *parent) : QWidget(parent){
+PaintWidget::PaintWidget(EDFfilehandler &edfh,EDFViewerWindow &edfViewerWindow) : QWidget(&edfViewerWindow),
+    edfh(edfh),
+    edfViewerWindow(edfViewerWindow){
 
 }
 
@@ -42,8 +45,8 @@ void PaintWidget::drawsignal(QPainter *p,int s,int x1,int y1,int x2,int y2){
     char str[256];
     int i,ii,j;
     edfh.getsignaldata(s,name,NULL,dimension,&phmin,&phmax,&digmin,&digmax,NULL,NULL);
-    samplestoprint=screentime/edfh.recduration*edfh.samplesperrecord[s];
-    firstsample=starttime/edfh.recduration*edfh.samplesperrecord[s];
+    samplestoprint=edfViewerWindow.getScreenTime()/edfh.recduration*edfh.samplesperrecord[s];
+    firstsample=edfViewerWindow.getStartTime()/edfh.recduration*edfh.samplesperrecord[s];
     p->setPen(QPen(0x999999));
     p->drawLine(x1,y1,x1,y2);
     p->drawLine(x1,y2,x2,y2);
@@ -90,7 +93,7 @@ void PaintWidget::drawsignal(QPainter *p,int s,int x1,int y1,int x2,int y2){
         int y2zero;
         posx=x1+(i*(x2-x1))/samplestoprint;
         y2zero=y2+digmin*(y2-y1)/(digmax-digmin);
-        posy=y2zero-(edfh.getdata(s,firstsample+i)*(y2-y1))/((digmax-digmin)/yZoom);
+        posy=y2zero-(edfh.getdata(s,firstsample+i)*(y2-y1))/((digmax-digmin)/edfViewerWindow.getYZoom());
         if (i!=0){
             p->drawLine(posx,posy,lastposx,lastposy);
         }
@@ -106,24 +109,24 @@ void PaintWidget::paintEvent(QPaintEvent *event){
     painter.begin(this);
     painter.fillRect(rect(),Qt::black);
     painter.setRenderHint(QPainter::Antialiasing);
-    if (fileisopen){
+    if (edfViewerWindow.fileIsOpen()){
         int numstoprint=0;
         for (i=0;i<edfh.numofgraphsingals();i++)
-            numstoprint+=showsignal[i];
+            numstoprint+=(edfViewerWindow.getShowSignal(i)?1:0);
         if (numstoprint==0){
-            showsignal[0]=1;
+            edfViewerWindow.setShowSignal(0,true);
             numstoprint=1;
         }
         d=height()/numstoprint;
         ii=0;
         for (i=0;i<edfh.numofgraphsingals();i++)
-            if (showsignal[i]){
+            if (edfViewerWindow.getShowSignal(i)){
                 drawsignal(&painter,i,10,ii*d+10,width()-10,(ii+1)*(d)-10);
                 ii++;
             }
         painter.setPen(QPen(0xdddddd));
         char str[256];
-        sprintf(str,"  %5.1f sec",starttime);
+        sprintf(str,"  %5.1f sec",edfViewerWindow.getStartTime());
         painter.drawText(2,height()-2,str);
     }
     painter.end();

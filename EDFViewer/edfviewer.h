@@ -28,46 +28,9 @@ SOFTWARE.
 #include <QWidget>
 #include <QtWidgets>
 #include <QApplication>
-#include "paintwidget.h"
-#include "edffilehandler.h"
+#include "EDFViewerWindow.h"
 
 #define VERSION "v1.5"
 
-class EDFViewerWindow : public QWidget
-{
-    Q_OBJECT
-
-    QScrollBar *hScrollBar;
-    QLineEdit* le1,*le2;
-public:
-    EDFViewerWindow(QWidget *parent = 0);
-    ~EDFViewerWindow();
-
-    char fileOpen(char*filename);
-    void exportToCSV (QString filename);
-
-public slots:
-    void exportToCSV();
-    void fileOpen();
-    void changehbar(int);
-    void screentimechanged(const QString &);
-    void yzoomchanged(const QString &);
-    void increaseTime();
-    void decreaseTime();
-};
-
-
-void datawindow();
-void signalswindow();
-void annotationswindow();
-void aboutwindow();
-
-extern char fileisopen;
-extern EDFfilehandler edfh;
-extern PaintWidget* paintWidget;
-extern EDFViewerWindow * edfViewerWindow;
-
-extern double starttime,screentime,yZoom;
-extern char showsignal[];
 
 #endif // EDFVIEWER_H

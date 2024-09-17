@@ -14,16 +14,20 @@ TEMPLATE = app
 RC_ICONS = edfviewer_ic.ico
 
 SOURCES += main.cpp\
-    annotationswindow.cpp \
+    annotationswindowhandler.cpp \
+    datawindowhandler.cpp \
     edffilehandler.cpp \
         edfviewerwindow.cpp \
     paintwidget.cpp \
-    datawindows.cpp \
-    signalswindow.cpp
+    signalswindowhandler.cpp
 
 HEADERS  += edfviewer.h \
+    EDFViewerWindow.h \
+    annotationswindowhandler.h \
+    datawindowhandler.h \
     paintwidget.h \
-    edffilehandler.h
+    edffilehandler.h \
+    signalswindowhandler.h
 
 LIBS += -L$$PWD/
 
