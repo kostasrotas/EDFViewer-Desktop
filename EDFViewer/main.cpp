@@ -27,6 +27,9 @@ SOFTWARE.
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
+#ifdef Q_OS_MACX
+    QCoreApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+#endif
     EDFViewerWindow w;
     w.show();
     if (argc>1)

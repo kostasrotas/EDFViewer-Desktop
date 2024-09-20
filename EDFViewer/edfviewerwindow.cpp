@@ -44,27 +44,27 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     vb->addLayout(hb);
     menuBar = new QMenuBar();
     menu= menuBar->addMenu(tr("&File"));
-    act=new QAction(tr("&Open"), this);
+    act=new QAction(tr("Open"), this);
     menu->addAction(act);
     connect(act, SIGNAL(triggered()), this, SLOT(fileOpen()));
-    act=new QAction(tr("E&xport To csv"), this);
+    act=new QAction(tr("Export To csv"), this);
     menu->addAction(act);
     connect(act, SIGNAL(triggered()), this, SLOT(exportToCSV()));
-    act=new QAction(tr("&Exit"), this);
+    act=new QAction(tr("Exit"), this);
     connect(act, SIGNAL(triggered()), this, SLOT(close()));
     menu->addAction(act);
     menu= menuBar->addMenu(tr("&EDF"));
-    act=new QAction(tr("&EDF Data"), this);
+    act=new QAction(tr("EDF Data"), this);
     menu->addAction(act);
     QObject::connect(act,&QAction::triggered,[&]{
         dataWindowHandlerP->open();
         });
-    act=new QAction(tr("&Signals"), this);
+    act=new QAction(tr("Signals"), this);
     menu->addAction(act);
     QObject::connect(act,&QAction::triggered,[&]{
         signalsWindowHandlerP->open();
         });
-    act=new QAction(tr("&Annotations"), this);
+    act=new QAction(tr("Annotations"), this);
     menu->addAction(act);
     QObject::connect(act,&QAction::triggered,[&]{
         annotationsWindowHandlerP->open();
@@ -73,7 +73,7 @@ EDFViewerWindow::EDFViewerWindow(QWidget *parent)
     hb->setStretch(hb->count()-1,1);
     menuBar = new QMenuBar();
     menu= menuBar->addMenu(tr("&Help"));
-    act=new QAction(tr("&About"), this);
+    act=new QAction(tr("About"), this);
     menu->addAction(act);
     QObject::connect(act,&QAction::triggered,[&]{
         dataWindowHandlerP->openAbout();
