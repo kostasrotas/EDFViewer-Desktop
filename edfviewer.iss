@@ -15,12 +15,17 @@ Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "A
 Name: "quicklaunchicon"; Description: "Create a &Quick Launch icon"; GroupDescription: "Additional icons:"; Flags: unchecked
 
 [Files]
-Source: "D:\EDFViewer\*.*"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\EDFViewer\iconengines\*.*"; DestDir: "{app}\iconengines\"; Flags: ignoreversion
-Source: "D:\EDFViewer\imageformats\*.*"; DestDir: "{app}\imageformats\"; Flags: ignoreversion
-Source: "D:\EDFViewer\platforms\*.*"; DestDir: "{app}\platforms\"; Flags: ignoreversion
-Source: "D:\EDFViewer\translations\*.*"; DestDir: "{app}\translations\"; Flags: ignoreversion
-Source: "D:\EDFViewer\styles\*.*"; DestDir: "{app}\styles\"; Flags: ignoreversion
+Source: "C:\EDFViewer\*.*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\EDFViewer\iconengines\*.*"; DestDir: "{app}\iconengines\"; Flags: ignoreversion
+Source: "C:\EDFViewer\imageformats\*.*"; DestDir: "{app}\imageformats\"; Flags: ignoreversion
+Source: "C:\EDFViewer\platforms\*.*"; DestDir: "{app}\platforms\"; Flags: ignoreversion
+Source: "C:\EDFViewer\translations\*.*"; DestDir: "{app}\translations\"; Flags: ignoreversion
+Source: "C:\EDFViewer\styles\*.*"; DestDir: "{app}\styles\"; Flags: ignoreversion
+Source: "C:\EDFViewer\tls\*.*"; DestDir: "{app}\tls\"; Flags: ignoreversion
+Source: "C:\EDFViewer\networkinformation\*.*"; DestDir: "{app}\networkinformation\"; Flags: ignoreversion
+Source: "C:\EDFViewer\generic\*.*"; DestDir: "{app}\generic\"; Flags: ignoreversion
+
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -36,4 +41,3 @@ Root: HKCR; Subkey: "EDFViewer\shell\open\command"; ValueType: string; ValueName
 
 [Run]
 Filename: "{app}\EDFViewer.exe"; Description: "Launch EDFViewer"; Flags: nowait postinstall skipifsilent
-
