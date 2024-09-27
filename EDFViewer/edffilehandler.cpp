@@ -27,6 +27,16 @@ SOFTWARE.
 
 //#include<qdebug.h>
 
+static long myatol(char * str){
+    char *endptr;
+    return std::strtol(str,&endptr,10);
+}
+
+static double myatof(char * str){
+    char *endptr;
+    return std::strtof(str,&endptr);
+}
+
 static const char ttstr[]="[Total time]";
 EDFfilehandler::EDFfilehandler(long readbuffersize){
     this->readbuffersize=readbuffersize;
@@ -85,26 +95,26 @@ int EDFfilehandler::openfile(char *pathname){
     readfilestr(str,8);
     strcpy(starttimerec,str);
     readfilestr(str,8);//bytes in header
-    bytesinheader=atol(str);
+    bytesinheader=myatol(str);
     readfilestr(str,44);// reserved
     readfilestr(str,8);// num of data records
-    numofdatarecords=atol(str);
+    numofdatarecords=myatol(str);
     //qDebug()<<"numofdatarecords"<<numofdatarecords;
     readfilestr(str,8);// duration of a data record, in seconds
-    if (atof("0,1")==0.1){// use decimal comma instead of decimal point
+    if (myatof("0,1")==0.1){// use decimal comma instead of decimal point
         for (i=0;i<strlen(str);i++)
          if (str[i]=='.')
              str[i]=',';
     }
-    else if (atof("0.1")==0.1){// use decimal comma instead of decimal point
+    else if (myatof("0.1")==0.1){// use decimal comma instead of decimal point
         for (i=0;i<strlen(str);i++)
          if (str[i]==',')
              str[i]='.';
     }
-    recduration=atof(str);
+    recduration=myatof(str);
     //qDebug()<<"recduration"<<recduration;
     readfilestr(str,4);//number of sigs (ns) in data record
-    numofsignals=atol(str);
+    numofsignals=myatol(str);
     if (edfdatarecoffset)
         free(edfdatarecoffset);
     edfdatarecoffset=(int *)malloc(numofsignals*sizeof(int));
@@ -119,7 +129,7 @@ int EDFfilehandler::openfile(char *pathname){
     for (i=0;i<numofsignals;i++){
         fseek(f,256+216*numofsignals+8*i,SEEK_SET);
         readfilestr(str,8);
-        samplesperrecord[i]=atol(str);
+        samplesperrecord[i]=myatol(str);
         edfdatarecoffset[i]=recsize;
         recsize+=samplesperrecord[i];
         numofsignaldata[i]=samplesperrecord[i]*numofdatarecords;
@@ -141,7 +151,7 @@ int EDFfilehandler::openfile(char *pathname){
     if (addannotationtime)
         while (getannotation(0,acount++,str))
                 if (strncmp(str,ttstr,strlen(ttstr))==0){
-                    float tt=atof(str+strlen(ttstr));
+                    float tt=myatof(str+strlen(ttstr));
                     //qDebug()<<"Total time"<<tt;
                     for (int i=0;i<numofsignals-1;i++)
                         numofsignaldata[i]=tt/recduration*samplesperrecord[i];
@@ -299,19 +309,19 @@ int EDFfilehandler::getsignaldata(int signum,char *name, char *transducertype, c
     fseek(f,256+104*numofsignals+8*signum,SEEK_SET);
     readfilestr(str,8);
     if (phmin)
-        *phmin=atof(str);
+        *phmin=myatof(str);
     fseek(f,256+112*numofsignals+8*signum,SEEK_SET);
     readfilestr(str,8);
     if (phmax)
-        *phmax=atof(str);
+        *phmax=myatof(str);
     fseek(f,256+120*numofsignals+8*signum,SEEK_SET);
     readfilestr(str,8);
     if (digmin)
-        *digmin=atol(str);
+        *digmin=myatol(str);
     fseek(f,256+128*numofsignals+8*signum,SEEK_SET);
     readfilestr(str,8);
     if (digmax)
-        *digmax=atol(str);
+        *digmax=myatol(str);
     fseek(f,256+136*numofsignals+80*signum,SEEK_SET);
     readfilestr(str,80);
     if (prefiltering)
@@ -319,7 +329,7 @@ int EDFfilehandler::getsignaldata(int signum,char *name, char *transducertype, c
     fseek(f,256+216*numofsignals+8*signum,SEEK_SET);
     readfilestr(str,8);
     if (samplesperrecordp)
-        *samplesperrecordp=atol(str);
+        *samplesperrecordp=myatol(str);
     return 1;
 }
 
