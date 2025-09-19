@@ -30,7 +30,7 @@ SOFTWARE.
 #include <QApplication>
 #include "edfviewerwindow.h"
 
-#define VERSION "v1.5"
+#define VERSION "v1.6"
 
 
 #endif // EDFVIEWER_H

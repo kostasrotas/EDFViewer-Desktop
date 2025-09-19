@@ -57,6 +57,7 @@ public:
     char annotsignal;
     char * annotbuffer;
     char addannotationtime;
+    char fileisreadonly;
 private:
     int addedsignals;
     signed short *readbuffer;

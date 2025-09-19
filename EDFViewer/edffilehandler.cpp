@@ -48,6 +48,7 @@ EDFfilehandler::EDFfilehandler(long readbuffersize){
     annotbuffer=NULL;
     readbufferstart=0;
     addannotationtime=1;
+    fileisreadonly=0;
 }
 
 EDFfilehandler::~EDFfilehandler(){
@@ -260,32 +261,34 @@ int EDFfilehandler::opennewfile(char *pathname, char *patientid, char *recordid,
 
 int EDFfilehandler::closefile(){
 if (f){
-    char str[256];
-    if (addannotationtime && numofdatarecords>0){
-        char found=0;
-        int acount=1;
-        while (getannotation(0,acount++,str))
-            if (strncmp(str,ttstr,strlen(ttstr))==0){
-                found=1;
-                break;
+    if (!fileisreadonly){
+        char str[256];
+        if (addannotationtime && numofdatarecords>0){
+            char found=0;
+            int acount=1;
+            while (getannotation(0,acount++,str))
+                if (strncmp(str,ttstr,strlen(ttstr))==0){
+                    found=1;
+                    break;
+                    }
+            if (!found){
+                sprintf(str,"%s%+.3f",ttstr,totaltime());
+                addannotation(0,str);
+                }
             }
-        if (!found){
-            sprintf(str,"%s%+.3f",ttstr,totaltime());
-            addannotation(0,str);
-        }
-    }
-    fseek(f,8,SEEK_SET);
-    writefilestr(patientid,80);// patient name
-    writefilestr(recordid,80);//recording id
-    writefilestr(startdaterec,8);
-    writefilestr(starttimerec,8);
-    fseek(f,236,SEEK_SET);
-    sprintf(str,"%ld",numofdatarecords);
-    writefilestr(str,8);// num of data records
+        fseek(f,8,SEEK_SET);
+        writefilestr(patientid,80);// patient name
+        writefilestr(recordid,80);//recording id
+        writefilestr(startdaterec,8);
+        writefilestr(starttimerec,8);
+        fseek(f,236,SEEK_SET);
+        sprintf(str,"%ld",numofdatarecords);
+        writefilestr(str,8);// num of data records
+        }//if
     fclose(f);
     f=NULL;
     //qDebug()<<"edfhcalled file closed";
-    }
+    }//if
 //.... buffers?
 return 0;
 }

@@ -175,6 +175,7 @@ char EDFViewerWindow::fileOpen(char*pathname){
         QMessageBox::information(this, "Cannot load file...",pathname);
         return 0;
     }
+    edfh.fileisreadonly=1;
     str1=strrchr(pathname,'//');
     if (str1==NULL)
         str1=pathname;
