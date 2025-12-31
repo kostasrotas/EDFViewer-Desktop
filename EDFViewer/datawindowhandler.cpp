@@ -62,7 +62,7 @@ void DataWindowHandler::openAbout(){
     wp->setLayout(vb);
     QString browserText=firstLineStr;
     browserText.append(" Program used to display EDF files.<br>  Released under MIT License (MIT)<br>  Created with QT Creator<br>  See Licences.txt for Licences<br><br>");
-    browserText.append("Project page:<br><a href=\"http://www.kostasrotas.mysch.gr/edfviewer\">http://www.kostasrotas.mysch.gr/edfviewer</a><br>");
+    browserText.append("Project page:<br><a href=\"http://www.kostasrotas.com/edfviewer\">http://www.kostasrotas.com/edfviewer</a><br>");
     browserText.append("Github Page:<br><a href=\"http://github.com/kostasrotas/EDFViewer-Desktop#edfviewer-desktop\">http://github.com/kostasrotas/EDFViewer-Desktop</a>" );
     browserText.append(lastLineStr);
     QTextBrowser* browser = new QTextBrowser();
