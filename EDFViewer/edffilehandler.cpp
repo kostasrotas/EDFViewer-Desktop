@@ -47,7 +47,7 @@ EDFfilehandler::EDFfilehandler(long readbuffersize){
     numofsignaldata=NULL;
     annotbuffer=NULL;
     readbufferstart=0;
-    addannotationtime=1;
+    addannotationtime=0;
     fileisreadonly=0;
 }
 
@@ -79,11 +79,15 @@ void EDFfilehandler::readfilestr(char *str,int size){
      return;
      }
 
-int EDFfilehandler::openfile(char *pathname){
+int EDFfilehandler::openfile(char *pathname, char isreadonly){
     char str[256];
     int i;
+    fileisreadonly=isreadonly;
     strcpy(this->pathname,pathname);
-    f=fopen(pathname,"rb+");
+    if (fileisreadonly)
+        f=fopen(pathname,"rb");
+    else
+        f=fopen(pathname,"rb+");
     if (f==NULL)
         return 0;//failed to open file
     readfilestr(str,8);//version data format
@@ -187,6 +191,7 @@ void EDFfilehandler::writefilestr(const char * str, int size){
 
 int EDFfilehandler::opennewfile(char *pathname, char *patientid, char *recordid, char *startdaterec, char *starttimerec, float recduration, int numofsignals){
     char str[256];
+    fileisreadonly=0;
     f=fopen(pathname,"wb+");
     if (f==NULL)
         return 0;
@@ -419,8 +424,11 @@ signed short EDFfilehandler::getdata(int signalnum, long pos){
 
 int EDFfilehandler::putdata(int signalnum, long pos, signed short int value)
 {
-    int r=1;
+    int r;
     long recnum=pos/samplesperrecord[signalnum];
+    if (fileisreadonly)
+        return 0;
+    r=1;
     while (recnum>=numofdatarecords){
         addemptyrecord();
         r=2;
@@ -473,6 +481,8 @@ void EDFfilehandler::getdescriptionstr(char *str){
 void EDFfilehandler::addemptyrecord(){
 signed short v=0;
 int i;
+if (fileisreadonly)
+    return;
 fseek(f,bytesinheader+sizeof(short signed)*recsize*numofdatarecords,SEEK_SET);
 for (i=0;i<recsize;i++)
     fwrite(&v,sizeof(signed short),1,f);
@@ -611,6 +621,8 @@ int EDFfilehandler::getannotation(int recnum,int annotnum,char*annotstr,char *ti
 
 int EDFfilehandler::addannotation(float time, char *annotstr, int signum){
 static char annotstr1[10000];
+if (fileisreadonly)
+    return 0;
 if (annotsignal==-1)
     return 0;
 if (signum!=-1){
@@ -650,6 +662,8 @@ return 1;
 
 int EDFfilehandler::delannotation(int recnum, int annotnum){
 int startpos=0,endpos;
+if (fileisreadonly)
+    return 0;
 readannotbuffer(recnum);
 while (annotnum){
     if (annotbuffer[++startpos]==0)
@@ -671,6 +685,8 @@ int EDFfilehandler::delannotation(int recnum, char *annotstr){
 int count=1;
 int r=0;
 char str[1024];
+if (fileisreadonly)
+    return -1;
 while (getannotation(recnum,count,str)!=0){
     if (strcmp(str,annotstr)==0)
         delannotation(recnum,count);

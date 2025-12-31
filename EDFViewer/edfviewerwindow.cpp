@@ -170,12 +170,11 @@ char EDFViewerWindow::fileOpen(char*pathname){
     char str[256];
     char *str1;
     int i;
-    if (edfh.openfile(pathname)==0){
+    if (edfh.openfile(pathname,1)==0){
         fileisopen=0;
         QMessageBox::information(this, "Cannot load file...",pathname);
         return 0;
     }
-    edfh.fileisreadonly=1;
     str1=strrchr(pathname,'//');
     if (str1==NULL)
         str1=pathname;

@@ -67,7 +67,7 @@ public:
 
     EDFfilehandler(long readbuffersize);
     ~EDFfilehandler();
-    int openfile(char *pathname);
+    int openfile(char *pathname, char isreadonly=0);
     int opennewfile(char *pathname,char *patientid,char* recordid,char* startdaterec,char *starttimerec,float recduration,int  numofsignals);
                 // must be followed by <numofsignals> addsignaldata
     int closefile();
